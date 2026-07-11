@@ -82,8 +82,10 @@ public class LoginScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partial) {
-        Services.PLATFORM.renderBackground(this, graphics, mouseX, mouseY, partial);
-        if (BG_IMAGE != null) graphics.blit(BG_IMAGE, 0, 0, 0, 0, this.width, this.height, this.width, this.height);
+        Services.PLATFORM.renderBackground(graphics, mouseX, mouseY, partial);
+        if (BG_IMAGE != null) {
+            graphics.blit(BG_IMAGE, 0, 0, 0, 0, this.width, this.height, this.width, this.height);
+        }
         graphics.fill(width/2 - 120, height/2 - 60, width/2 + 120, height/2 + (isRegistered ? 50 : 80), 0x99000000);
         super.render(graphics, mouseX, mouseY, partial);
         graphics.drawCenteredString(font, isRegistered ? "§lINICIAR SESIÓN" : "§lREGISTRO", width/2, height/2 - 50, 0xFFFFFF);

@@ -1,5 +1,7 @@
 package org.astral.lumineriabase.forge.network.packets;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
@@ -20,9 +22,12 @@ public class AuthVelocityPacket {
         this.playerName = buf.readUtf();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public void encode(@NotNull FriendlyByteBuf buf) {
-        buf.writeUtf(action);
-        buf.writeUtf(playerName);
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(this.action);
+        out.writeUTF(this.playerName);
+        buf.writeBytes(out.toByteArray());
     }
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {

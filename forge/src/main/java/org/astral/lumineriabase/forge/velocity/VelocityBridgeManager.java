@@ -28,7 +28,6 @@ public class VelocityBridgeManager {
         chatQueue.dataFrom(player.getUUID()).nextResult()
                 .orTimeout(3, TimeUnit.SECONDS)
                 .thenAccept(result -> {
-                    // Bloque vacío igual que en NeoForge
                 });
     }
 
@@ -62,17 +61,4 @@ public class VelocityBridgeManager {
         queue.dataFrom(playerId).complete(signedResult);
     }
 
-    private static boolean isLocal() {
-        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            String methodName = element.getMethodName();
-            String className = element.getClassName();
-
-            if (methodName.contains("handleChat") ||
-                    className.contains("PlayerConnection") ||
-                    className.contains("ServerGamePacketListenerImpl")) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

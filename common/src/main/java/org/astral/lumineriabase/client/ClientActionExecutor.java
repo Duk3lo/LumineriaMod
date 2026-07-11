@@ -1,6 +1,7 @@
 package org.astral.lumineriabase.client;
 
 import net.minecraft.client.Minecraft;
+
 import java.util.function.Consumer;
 
 public class ClientActionExecutor {

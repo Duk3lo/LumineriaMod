@@ -42,7 +42,23 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void renderBackground(@NotNull Screen screen, GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        screen.renderBackground(graphics, mouseX, mouseY, partialTick);
+    public String getCurrentRoutingKey() {
+        return NeoForgeConfig.routingKey;
+    }
+
+    @Override
+    public void saveRoutingKey(String key) {
+        NeoForgeConfig.routingKey = key;
+        NeoForgeConfig.ROUTING_KEY_VALUE.set(key);
+        NeoForgeConfig.CLIENT_SPEC.save();
+    }
+
+    @Override
+    public void renderBackground(Object graphics, int mouseX, int mouseY, float partialTick) {
+        if (graphics instanceof net.minecraft.client.gui.GuiGraphics guiGraphics) {
+            if (net.minecraft.client.Minecraft.getInstance().screen != null) {
+                net.minecraft.client.Minecraft.getInstance().screen.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+            }
+        }
     }
 }

@@ -21,10 +21,12 @@ public class ForgeNetwork {
     private static int packetId = 0;
     private static int id() { return packetId++; }
 
+    @SuppressWarnings("unused")
     public static void init(FMLCommonSetupEvent event) {
         CHANNEL.registerMessage(id(), OpenLoginScreenPacket.class, OpenLoginScreenPacket::encode, OpenLoginScreenPacket::new, OpenLoginScreenPacket::handle);
         CHANNEL.registerMessage(id(), ClientLoginAttemptPacket.class, ClientLoginAttemptPacket::encode, ClientLoginAttemptPacket::new, ClientLoginAttemptPacket::handle);
         CHANNEL.registerMessage(id(), AuthVelocityPacket.class, AuthVelocityPacket::encode, AuthVelocityPacket::new, AuthVelocityPacket::handle);
         CHANNEL.registerMessage(id(), SignedVelocityPacket.class, SignedVelocityPacket::encode, SignedVelocityPacket::new, SignedVelocityPacket::handle);
+        CHANNEL.registerMessage(id(), SyncPacket.class, SyncPacket::encode, SyncPacket::new, SyncPacket::handle);
     }
 }

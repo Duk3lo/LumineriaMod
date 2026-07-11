@@ -42,8 +42,25 @@ public class ForgePlatformHelper implements IPlatformHelper {
         ForgeNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new AuthVelocityPacket(action, playerName));
     }
 
+
     @Override
-    public void renderBackground(@NotNull Screen screen, GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        screen.renderBackground(graphics);
+    public String getCurrentRoutingKey() {
+        return ForgeConfig.routingKey;
+    }
+
+    @Override
+    public void saveRoutingKey(String key) {
+        ForgeConfig.routingKey = key;
+        ForgeConfig.ROUTING_KEY_VALUE.set(key);
+        ForgeConfig.CLIENT_SPEC.save();
+    }
+
+    @Override
+    public void renderBackground(Object graphics, int mouseX, int mouseY, float partialTick) {
+        if (graphics instanceof net.minecraft.client.gui.GuiGraphics guiGraphics) {
+            if (net.minecraft.client.Minecraft.getInstance().screen != null) {
+                net.minecraft.client.Minecraft.getInstance().screen.renderBackground(guiGraphics);
+            }
+        }
     }
 }
