@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.8" apply false
 }
 
-group = "org.astral.spectra"
+group = "org.astral.lumineriabase"
 version = "1.0-SNAPSHOT"
 
 repositories {

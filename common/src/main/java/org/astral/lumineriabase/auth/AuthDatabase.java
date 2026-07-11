@@ -32,7 +32,7 @@ public class AuthDatabase {
 
     public static void init() {
         try {
-            Class.forName("org.sqlite.JDBC");
+            Class.forName("org.sqlite.JDBC", true, AuthDatabase.class.getClassLoader());
 
             // Obtenemos la ruta dinámicamente según la plataforma
             Path dbPath = Services.PLATFORM.getConfigDir().resolve(Constants.MODID).resolve(Constants.MODID + "_auth.db");
