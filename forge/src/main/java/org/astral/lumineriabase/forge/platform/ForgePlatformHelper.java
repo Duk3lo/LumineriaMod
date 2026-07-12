@@ -1,7 +1,11 @@
 package org.astral.lumineriabase.forge.platform;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.PacketDistributor;
@@ -9,12 +13,11 @@ import org.astral.lumineriabase.platform.IPlatformHelper;
 import org.astral.lumineriabase.forge.setup.ForgeConfig;
 import org.astral.lumineriabase.forge.network.ForgeNetwork;
 import org.astral.lumineriabase.forge.network.packets.OpenLoginScreenPacket;
-import org.astral.lumineriabase.forge.network.packets.AuthVelocityPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-@SuppressWarnings("unused")
+
 public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
@@ -38,8 +41,17 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void sendAuthVelocity(ServerPlayer player, String action, String playerName) {
-        ForgeNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new AuthVelocityPacket(action, playerName));
+    @SuppressWarnings("UnstableApiUsage")
+    public void sendAuthVelocity(@NotNull ServerPlayer player, String action, String playerName) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(action);
+        out.writeUTF(playerName);
+        buf.writeBytes(out.toByteArray());
+        @SuppressWarnings("removal")
+        ResourceLocation channel = new ResourceLocation("authmevelocity", "main");
+        ClientboundCustomPayloadPacket packet = new ClientboundCustomPayloadPacket(channel, buf);
+        player.connection.send(packet);
     }
 
 

@@ -32,9 +32,7 @@ public class OpenLoginScreenPacket {
             if ("CLOSE_AND_RELOAD".equals(message)) {
                 ClientActionExecutor.clearPendingLogin();
             } else {
-                ClientActionExecutor.openLoginScreen(isRegistered, message, (password) -> {
-                    ForgeNetwork.CHANNEL.sendToServer(new ClientLoginAttemptPacket(password));
-                });
+                ClientActionExecutor.openLoginScreen(isRegistered, message, (password) -> ForgeNetwork.CHANNEL.sendToServer(new ClientLoginAttemptPacket(password)));
             }
         });
         ctx.get().setPacketHandled(true);
