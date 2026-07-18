@@ -1,4 +1,4 @@
-package com.duk3lo.lumineriabase.presence;
+package org.astral.lumineriabase.presence;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
