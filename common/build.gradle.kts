@@ -16,6 +16,7 @@ minecraft {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.10.1")
     compileOnly("org.xerial:sqlite-jdbc:3.45.1.0")
     compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.spongepowered:mixin:0.8.5")
