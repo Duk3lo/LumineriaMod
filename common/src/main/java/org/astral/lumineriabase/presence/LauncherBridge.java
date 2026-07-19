@@ -26,7 +26,7 @@ public final class LauncherBridge {
         String portEnv = System.getenv("LUMINERIA_IPC_PORT");
         String idEnv = System.getenv("LUMINERIA_PROFILE_ID");
         if (portEnv == null || idEnv == null) {
-            return; // no se lanzó desde Lumineria Launcher, no hacemos nada
+            return;
         }
         port = Integer.parseInt(portEnv);
         profileId = idEnv;

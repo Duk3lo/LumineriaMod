@@ -9,6 +9,7 @@ import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.neoforge.setup.NeoForgeConfig;
 import org.astral.lumineriabase.neoforge.network.NeoForgeNetwork;
 import org.astral.lumineriabase.neoforge.client.NeoForgeClientHelper; // Nuevo import
+import org.astral.lumineriabase.presence.LauncherBridge;
 import org.jetbrains.annotations.NotNull;
 
 @Mod(Constants.MODID)
@@ -21,6 +22,7 @@ public class LumineriabaseNeoForge {
 
         if (FMLEnvironment.dist.isClient()) {
             NeoForgeClientHelper.registerConfigScreen(modContainer);
+            LauncherBridge.start();
         }
     }
 }

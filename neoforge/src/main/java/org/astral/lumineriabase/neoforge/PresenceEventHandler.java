@@ -1,18 +1,17 @@
-package org.astral.lumineriabase.forge;
+package org.astral.lumineriabase.neoforge;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.presence.LauncherBridge;
 import org.astral.lumineriabase.presence.PresenceConfig;
-import org.jetbrains.annotations.NotNull;
 
-@Mod.EventBusSubscriber(modid = Constants.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Constants.MODID, value = Dist.CLIENT)
 public class PresenceEventHandler {
 
     private static int tickCounter = 0;
@@ -31,8 +30,7 @@ public class PresenceEventHandler {
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.@NotNull ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onClientTick(ClientTickEvent.Post event) {
         if (Minecraft.getInstance().level == null) return;
 
         tickCounter++;

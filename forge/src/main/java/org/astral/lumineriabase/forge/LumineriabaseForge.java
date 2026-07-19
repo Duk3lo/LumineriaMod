@@ -10,6 +10,7 @@ import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.forge.setup.ForgeConfig;
 import org.astral.lumineriabase.forge.network.ForgeNetwork;
 import org.astral.lumineriabase.forge.client.ForgeClientHelper;
+import org.astral.lumineriabase.presence.LauncherBridge;
 
 @Mod(Constants.MODID)
 public class LumineriabaseForge {
@@ -23,6 +24,7 @@ public class LumineriabaseForge {
 
         if (FMLEnvironment.dist.isClient()) {
             ForgeClientHelper.registerConfigScreen();
+            LauncherBridge.start();
         }
     }
 }
