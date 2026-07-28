@@ -48,6 +48,11 @@ public class AuthDatabase {
                         "last_login_time BIGINT NOT NULL DEFAULT 0" +
                         ");";
                 stmt.execute(sql);
+
+                stmt.execute("CREATE TABLE IF NOT EXISTS launcher_status (" +
+                        "uuid VARCHAR(36) PRIMARY KEY, " +
+                        "verified_premium INTEGER NOT NULL DEFAULT 0" +
+                        ");");
             }
             LOGGER.info("Base de datos inicializada en: {}", dbPath.toAbsolutePath());
 
@@ -103,6 +108,30 @@ public class AuthDatabase {
         PlayerData data = getPlayer(uuid);
         if (data == null) return false;
         return data.hashedPassword.equals(hash(rawPassword));
+    }
+
+    public static void setLauncherVerifiedPremium(UUID uuid, boolean verified) {
+        String sql = "INSERT INTO launcher_status(uuid, verified_premium) VALUES(?, ?) " +
+                "ON CONFLICT(uuid) DO UPDATE SET verified_premium = excluded.verified_premium";
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, uuid.toString());
+            pstmt.setInt(2, verified ? 1 : 0);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            LOGGER.error("Error al guardar el estado premium del launcher", e);
+        }
+    }
+
+    public static boolean isLauncherVerifiedPremium(UUID uuid) {
+        String sql = "SELECT verified_premium FROM launcher_status WHERE uuid = ?";
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, uuid.toString());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return rs.getInt("verified_premium") == 1;
+        } catch (Exception e) {
+            LOGGER.error("Error al leer el estado premium del launcher", e);
+        }
+        return false;
     }
 
     public static @NotNull String hash(String password) {

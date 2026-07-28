@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 @EventBusSubscriber(modid = Constants.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
+    private static final boolean OWNS_PREMIUM = "true".equalsIgnoreCase(System.getenv("LUMINERIA_OWNS_PREMIUM"));
+
     @SubscribeEvent
     public static void onToastAdd(@NotNull ToastAddEvent event) {
         Toast toast = event.getToast();
@@ -31,6 +33,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onClientJoin(ClientPlayerNetworkEvent.LoggingIn event) {
+        if (Minecraft.getInstance().hasSingleplayerServer()) return;
         Minecraft.getInstance().getToasts().clear();
         PacketDistributor.sendToServer(new RouterHandshakePayload(NeoForgeConfig.routingKey));
     }

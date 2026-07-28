@@ -1,7 +1,6 @@
 package org.astral.lumineriabase.neoforge.platform;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -9,7 +8,6 @@ import org.astral.lumineriabase.platform.IPlatformHelper;
 import org.astral.lumineriabase.neoforge.setup.NeoForgeConfig;
 import org.astral.lumineriabase.neoforge.network.payloads.OpenLoginScreenPayload;
 import org.astral.lumineriabase.neoforge.network.payloads.AuthVelocityPayload;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
@@ -60,5 +58,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
                 net.minecraft.client.Minecraft.getInstance().screen.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
             }
         }
+    }
+
+    @Override
+    public void sendPremiumChallenge(ServerPlayer player, String serverId) {
+        PacketDistributor.sendToPlayer(player, new org.astral.lumineriabase.neoforge.network.payloads.PremiumChallengePayload(serverId));
     }
 }

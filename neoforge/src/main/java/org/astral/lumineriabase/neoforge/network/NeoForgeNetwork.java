@@ -6,6 +6,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.astral.lumineriabase.Constants;
+import org.astral.lumineriabase.auth.AuthDatabase;
 import org.astral.lumineriabase.auth.ServerAuthManager;
 import org.astral.lumineriabase.client.ClientActionExecutor;
 import org.astral.lumineriabase.neoforge.network.payloads.*;
@@ -63,6 +64,29 @@ public class NeoForgeNetwork {
                 SignedVelocityPayload.TYPE,
                 SignedVelocityPayload.STREAM_CODEC,
                 VelocityBridgeManager::handlePayload
+        );
+
+        registrar.playToClient(
+                PremiumChallengePayload.TYPE,
+                PremiumChallengePayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (org.astral.lumineriabase.client.ClientPremiumVerifier.isMsaSession()) {
+                        org.astral.lumineriabase.client.ClientPremiumVerifier.attemptJoinAsync(payload.serverId(),
+                                attempted -> PacketDistributor.sendToServer(new PremiumJoinResultPayload(attempted)));
+                    } else {
+                        PacketDistributor.sendToServer(new PremiumJoinResultPayload(false));
+                    }
+                })
+        );
+
+        registrar.playToServer(
+                PremiumJoinResultPayload.TYPE,
+                PremiumJoinResultPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        ServerAuthManager.onPremiumJoinResult(serverPlayer, payload.attempted());
+                    }
+                })
         );
 
         registrar.playToClient(

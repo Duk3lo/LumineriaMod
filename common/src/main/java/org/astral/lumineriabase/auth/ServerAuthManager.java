@@ -16,7 +16,8 @@ public class ServerAuthManager {
     public static final Map<UUID, PendingAuthData> pendingLogins = new ConcurrentHashMap<>();
     public record PendingAuthData(int joinTick, Vec3 pos, GameType previousGameMode) {}
 
-    public static void onPlayerJoin(ServerPlayer player) {
+    public static void onPlayerJoin(@NotNull ServerPlayer player) {
+        if (!player.server.isDedicatedServer()) return;
         String ip = getPlayerIp(player);
         AuthDatabase.PlayerData data = AuthDatabase.getPlayer(player.getUUID());
 
@@ -30,18 +31,43 @@ public class ServerAuthManager {
                 return;
             }
         }
+
         GameType oldMode = player.gameMode.getGameModeForPlayer();
         pendingLogins.put(player.getUUID(), new PendingAuthData(player.server.getTickCount(), player.position(), oldMode));
         player.setGameMode(GameType.SPECTATOR);
-        Services.PLATFORM.sendOpenLogin(player, data != null, "");
+
+        String serverId = PremiumVerifier.beginChallenge(player.getUUID());
+        Services.PLATFORM.sendPremiumChallenge(player, serverId); // método nuevo, ver más abajo
+    }
+
+    public static void onPremiumJoinResult(@NotNull ServerPlayer player, boolean attempted) {
+        if (!isPending(player.getUUID())) return;
+
+        if (attempted) {
+            AuthDatabase.setLauncherVerifiedPremium(player.getUUID(), true);
+            AuthDatabase.updateSession(player.getUUID(), getPlayerIp(player));
+            player.sendSystemMessage(net.minecraft.network.chat.Component.literal("§a¡Cuenta de Microsoft verificada automáticamente!"));
+            onSuccessfulLogin(player);
+        } else {
+            PremiumVerifier.cancelChallenge(player.getUUID());
+            Services.PLATFORM.sendOpenLogin(player, AuthDatabase.getPlayer(player.getUUID()) != null, "Iniciando como No-Premium. Ingresa tu clave.");
+        }
     }
 
     public static void onPlayerQuit(@NotNull ServerPlayer player) {
+        if (!player.server.isDedicatedServer()) return;
         pendingLogins.remove(player.getUUID());
         notifyVelocity(player, "LOGOUT");
     }
 
     public static void onServerTick(MinecraftServer server) {
+        PremiumVerifier.checkTimeouts(uuid -> {
+            ServerPlayer p = server.getPlayerList().getPlayer(uuid);
+            if (p != null && isPending(uuid)) {
+                Services.PLATFORM.sendOpenLogin(p, AuthDatabase.getPlayer(uuid) != null, "");
+            }
+        });
+
         pendingLogins.forEach((uuid, data) -> {
             ServerPlayer player = server.getPlayerList().getPlayer(uuid);
             if (player != null && (server.getTickCount() - data.joinTick > Services.PLATFORM.getLoginTimeoutSeconds() * 20)) {

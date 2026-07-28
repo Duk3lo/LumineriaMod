@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class NeoForgeConfig {
 
-    // ---- COMMON: se carga en servidor y cliente ----
     private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
 
     private static final ModConfigSpec.IntValue LOGIN_TIMEOUT = COMMON_BUILDER
@@ -19,7 +18,6 @@ public class NeoForgeConfig {
 
     public static final ModConfigSpec COMMON_SPEC = COMMON_BUILDER.build();
 
-    // ---- CLIENT: SOLO existe/carga en el cliente físico ----
     private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
     public static final ModConfigSpec.ConfigValue<String> ROUTING_KEY_VALUE = CLIENT_BUILDER

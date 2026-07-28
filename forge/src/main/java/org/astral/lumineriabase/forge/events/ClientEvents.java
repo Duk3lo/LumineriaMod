@@ -20,6 +20,8 @@ import net.minecraftforge.fml.common.Mod;
 import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.client.ClientActionExecutor;
 import org.astral.lumineriabase.client.RoutingConfigScreen;
+import org.astral.lumineriabase.forge.network.ForgeNetwork;
+import org.astral.lumineriabase.forge.network.packets.RouterHandshakePacket;
 import org.astral.lumineriabase.forge.setup.ForgeConfig;
 import org.astral.lumineriabase.platform.Services;
 import org.jetbrains.annotations.NotNull;
@@ -41,12 +43,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onClientJoin(ClientPlayerNetworkEvent.LoggingIn event) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeBytes(ForgeConfig.routingKey.getBytes(StandardCharsets.UTF_8));
-        ResourceLocation channel = ResourceLocation.fromNamespaceAndPath("lumineriabase", "router");
-        if (Minecraft.getInstance().getConnection() != null) {
-            Minecraft.getInstance().getConnection().send(new ServerboundCustomPayloadPacket(channel, buf));
-        }
+        if (Minecraft.getInstance().hasSingleplayerServer()) return;
+        ForgeNetwork.CHANNEL.sendToServer(new RouterHandshakePacket(ForgeConfig.routingKey));
     }
 
     @SubscribeEvent

@@ -68,6 +68,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
+    public void sendPremiumChallenge(ServerPlayer player, String serverId) {
+        ForgeNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new org.astral.lumineriabase.forge.network.packets.PremiumChallengePacket(serverId));
+    }
+
+    @Override
     public void renderBackground(Object graphics, int mouseX, int mouseY, float partialTick) {
         if (graphics instanceof net.minecraft.client.gui.GuiGraphics guiGraphics) {
             if (net.minecraft.client.Minecraft.getInstance().screen != null) {

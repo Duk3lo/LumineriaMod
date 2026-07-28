@@ -23,9 +23,12 @@ public class ForgeNetwork {
 
     @SuppressWarnings("unused")
     public static void init(FMLCommonSetupEvent event) {
+        CHANNEL.registerMessage(id(), RouterHandshakePacket.class, RouterHandshakePacket::encode, RouterHandshakePacket::new, RouterHandshakePacket::handle);
         CHANNEL.registerMessage(id(), OpenLoginScreenPacket.class, OpenLoginScreenPacket::encode, OpenLoginScreenPacket::new, OpenLoginScreenPacket::handle);
         CHANNEL.registerMessage(id(), ClientLoginAttemptPacket.class, ClientLoginAttemptPacket::encode, ClientLoginAttemptPacket::new, ClientLoginAttemptPacket::handle);
         CHANNEL.registerMessage(id(), SignedVelocityPacket.class, SignedVelocityPacket::encode, SignedVelocityPacket::new, SignedVelocityPacket::handle);
         CHANNEL.registerMessage(id(), SyncPacket.class, SyncPacket::encode, SyncPacket::new, SyncPacket::handle);
+        CHANNEL.registerMessage(id(), PremiumChallengePacket.class, PremiumChallengePacket::encode, PremiumChallengePacket::new, PremiumChallengePacket::handle);
+        CHANNEL.registerMessage(id(), PremiumJoinResultPacket.class, PremiumJoinResultPacket::encode, PremiumJoinResultPacket::new, PremiumJoinResultPacket::handle);
     }
 }
