@@ -6,7 +6,6 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.astral.lumineriabase.Constants;
-import org.astral.lumineriabase.auth.AuthDatabase;
 import org.astral.lumineriabase.auth.ServerAuthManager;
 import org.astral.lumineriabase.client.ClientActionExecutor;
 import org.astral.lumineriabase.neoforge.network.payloads.*;

@@ -34,7 +34,6 @@ public class AuthDatabase {
         try {
             Class.forName("org.sqlite.JDBC", true, AuthDatabase.class.getClassLoader());
 
-            // Obtenemos la ruta dinámicamente según la plataforma
             Path dbPath = Services.PLATFORM.getConfigDir().resolve(Constants.MODID).resolve(Constants.MODID + "_auth.db");
             Files.createDirectories(dbPath.getParent());
 
@@ -120,18 +119,6 @@ public class AuthDatabase {
         } catch (Exception e) {
             LOGGER.error("Error al guardar el estado premium del launcher", e);
         }
-    }
-
-    public static boolean isLauncherVerifiedPremium(UUID uuid) {
-        String sql = "SELECT verified_premium FROM launcher_status WHERE uuid = ?";
-        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, uuid.toString());
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) return rs.getInt("verified_premium") == 1;
-        } catch (Exception e) {
-            LOGGER.error("Error al leer el estado premium del launcher", e);
-        }
-        return false;
     }
 
     public static @NotNull String hash(String password) {

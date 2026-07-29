@@ -47,7 +47,10 @@ public final class LauncherBridge {
         if (serverName != null) json.addProperty("server_name", serverName);
         if (serverIconUrl != null) json.addProperty("server_icon", serverIconUrl);
 
-        QUEUE.offer(json);
+        boolean added = QUEUE.offer(json);
+        if (!added) {
+            System.err.println("Warning: Status update queue is full. Message dropped.");
+        }
     }
 
     private static void workerLoop() {
@@ -71,7 +74,6 @@ public final class LauncherBridge {
                 Thread.currentThread().interrupt();
                 return;
             } catch (IOException e) {
-                // el launcher no está escuchando o se cortó la conexión; se reintenta con el próximo mensaje
                 socket = null;
                 writer = null;
             }

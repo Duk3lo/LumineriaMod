@@ -54,7 +54,7 @@ public class VelocityBridgeManager {
         if ("CANCEL".equalsIgnoreCase(payload.result())) {
             signedResult = SignedResult.cancel();
         } else if ("MODIFY".equalsIgnoreCase(payload.result())) {
-            signedResult = SignedResult.modify(payload.modified());
+            signedResult = SignedResult.modify();
         } else {
             signedResult = SignedResult.allowed();
         }

@@ -91,7 +91,7 @@ public class ClientPremiumVerifier {
                         return true;
                     } catch (Throwable t) {
                         Throwable cause = t instanceof java.lang.reflect.InvocationTargetException ? t.getCause() : t;
-                        LOGGER.error("[Lumineria] La validación con Mojang falló o fue rechazada: " + cause.getMessage(), cause);
+                        LOGGER.error("[Lumineria] La validación con Mojang falló o fue rechazada: {}", cause.getMessage(), cause);
                         return false;
                     }
                 }, IO_POOL)

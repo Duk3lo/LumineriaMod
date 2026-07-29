@@ -37,7 +37,7 @@ public class ServerAuthManager {
         player.setGameMode(GameType.SPECTATOR);
 
         String serverId = PremiumVerifier.beginChallenge(player.getUUID());
-        Services.PLATFORM.sendPremiumChallenge(player, serverId); // método nuevo, ver más abajo
+        Services.PLATFORM.sendPremiumChallenge(player, serverId);
     }
 
     public static void onPremiumJoinResult(@NotNull ServerPlayer player, boolean attempted) {
