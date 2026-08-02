@@ -2,6 +2,7 @@ package org.astral.lumineriabase.forge.events;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -14,7 +15,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.auth.AuthDatabase;
+import org.astral.lumineriabase.auth.LumineriaCommands;
 import org.astral.lumineriabase.auth.ServerAuthManager;
+import org.astral.lumineriabase.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID)
@@ -26,9 +29,20 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        LumineriaCommands.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             ServerAuthManager.onPlayerJoin(player);
+
+            // Le mandamos al cliente el max-players REAL configurado en este servidor,
+            // para que el rich presence del launcher deje de depender del properties local.
+            if (player.getServer() != null) {
+                Services.PLATFORM.sendPresenceMaxPlayers(player, player.getServer().getMaxPlayers());
+            }
         }
     }
 

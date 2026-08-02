@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -14,7 +15,9 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.auth.AuthDatabase;
+import org.astral.lumineriabase.auth.LumineriaCommands;
 import org.astral.lumineriabase.auth.ServerAuthManager;
+import org.astral.lumineriabase.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
 @EventBusSubscriber(modid = Constants.MODID)
@@ -26,9 +29,18 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        LumineriaCommands.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             ServerAuthManager.onPlayerJoin(player);
+
+            if (player.getServer() != null) {
+                Services.PLATFORM.sendPresenceMaxPlayers(player, player.getServer().getMaxPlayers());
+            }
         }
     }
 

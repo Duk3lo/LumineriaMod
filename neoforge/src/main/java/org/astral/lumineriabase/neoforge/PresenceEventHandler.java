@@ -8,6 +8,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.astral.lumineriabase.Constants;
+import org.astral.lumineriabase.client.ClientPresenceState;
 import org.astral.lumineriabase.presence.LauncherBridge;
 import org.astral.lumineriabase.presence.PresenceConfig;
 
@@ -27,6 +28,7 @@ public class PresenceEventHandler {
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
         LauncherBridge.sendStatus(0, 0, null, null);
+        ClientPresenceState.reset();
     }
 
     @SubscribeEvent
@@ -45,7 +47,7 @@ public class PresenceEventHandler {
         if (connection == null) return;
 
         int online = connection.getOnlinePlayers().size();
-        LauncherBridge.sendStatus(online, PresenceConfig.SERVER_MAX_PLAYERS,
+        LauncherBridge.sendStatus(online, ClientPresenceState.getServerMaxPlayers(),
                 PresenceConfig.SERVER_NAME, PresenceConfig.SERVER_ICON_URL);
     }
 }

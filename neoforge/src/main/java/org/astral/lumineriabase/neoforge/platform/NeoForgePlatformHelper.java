@@ -8,6 +8,7 @@ import org.astral.lumineriabase.platform.IPlatformHelper;
 import org.astral.lumineriabase.neoforge.setup.NeoForgeConfig;
 import org.astral.lumineriabase.neoforge.network.payloads.OpenLoginScreenPayload;
 import org.astral.lumineriabase.neoforge.network.payloads.AuthVelocityPayload;
+import org.astral.lumineriabase.neoforge.network.payloads.PresenceMaxPlayersPayload;
 
 import java.nio.file.Path;
 
@@ -63,5 +64,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public void sendPremiumChallenge(ServerPlayer player, String serverId) {
         PacketDistributor.sendToPlayer(player, new org.astral.lumineriabase.neoforge.network.payloads.PremiumChallengePayload(serverId));
+    }
+
+    @Override
+    public void sendPresenceMaxPlayers(ServerPlayer player, int maxPlayers) {
+        PacketDistributor.sendToPlayer(player, new PresenceMaxPlayersPayload(maxPlayers));
     }
 }

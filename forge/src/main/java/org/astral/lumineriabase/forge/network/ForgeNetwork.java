@@ -30,5 +30,6 @@ public class ForgeNetwork {
         CHANNEL.registerMessage(id(), SyncPacket.class, SyncPacket::encode, SyncPacket::new, SyncPacket::handle);
         CHANNEL.registerMessage(id(), PremiumChallengePacket.class, PremiumChallengePacket::encode, PremiumChallengePacket::new, PremiumChallengePacket::handle);
         CHANNEL.registerMessage(id(), PremiumJoinResultPacket.class, PremiumJoinResultPacket::encode, PremiumJoinResultPacket::new, PremiumJoinResultPacket::handle);
+        CHANNEL.registerMessage(id(), PresenceMaxPlayersPacket.class, PresenceMaxPlayersPacket::encode, PresenceMaxPlayersPacket::new, PresenceMaxPlayersPacket::handle); // NUEVO
     }
 }

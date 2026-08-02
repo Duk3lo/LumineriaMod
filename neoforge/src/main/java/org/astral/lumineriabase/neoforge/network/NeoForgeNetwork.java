@@ -8,6 +8,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.astral.lumineriabase.Constants;
 import org.astral.lumineriabase.auth.ServerAuthManager;
 import org.astral.lumineriabase.client.ClientActionExecutor;
+import org.astral.lumineriabase.client.ClientPresenceState;
 import org.astral.lumineriabase.neoforge.network.payloads.*;
 
 import org.astral.lumineriabase.neoforge.velocity.VelocityBridgeManager;
@@ -103,6 +104,12 @@ public class NeoForgeNetwork {
                         }
                     }
                 })
+        );
+
+        registrar.playToClient(
+                PresenceMaxPlayersPayload.TYPE,
+                PresenceMaxPlayersPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> ClientPresenceState.setServerMaxPlayers(payload.maxPlayers()))
         );
     }
 }

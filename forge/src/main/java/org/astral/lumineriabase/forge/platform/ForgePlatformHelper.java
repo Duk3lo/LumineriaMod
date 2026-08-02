@@ -13,6 +13,7 @@ import org.astral.lumineriabase.platform.IPlatformHelper;
 import org.astral.lumineriabase.forge.setup.ForgeConfig;
 import org.astral.lumineriabase.forge.network.ForgeNetwork;
 import org.astral.lumineriabase.forge.network.packets.OpenLoginScreenPacket;
+import org.astral.lumineriabase.forge.network.packets.PresenceMaxPlayersPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -70,6 +71,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public void sendPremiumChallenge(ServerPlayer player, String serverId) {
         ForgeNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new org.astral.lumineriabase.forge.network.packets.PremiumChallengePacket(serverId));
+    }
+
+    @Override
+    public void sendPresenceMaxPlayers(ServerPlayer player, int maxPlayers) {
+        ForgeNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new PresenceMaxPlayersPacket(maxPlayers));
     }
 
     @Override

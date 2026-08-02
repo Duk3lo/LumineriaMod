@@ -11,6 +11,7 @@ public interface IPlatformHelper {
     void saveRoutingKey(String key);
     void sendOpenLogin(ServerPlayer player, boolean isRegistered, String message);
     void sendAuthVelocity(ServerPlayer player, String action, String playerName);
-    void sendPremiumChallenge(ServerPlayer player, String serverId); // NUEVO
+    void sendPremiumChallenge(ServerPlayer player, String serverId);
+    void sendPresenceMaxPlayers(ServerPlayer player, int maxPlayers); // NUEVO
     void renderBackground(Object graphics, int mouseX, int mouseY, float partialTick);
 }
